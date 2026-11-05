@@ -1,0 +1,35 @@
+// Блок task-stats. Модифікатор item--done підсвічує лічильник виконаних зеленим.
+
+@use '../styles/variables' as *;
+
+.task-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  margin: 0;
+  background: $color-surface;
+  border: 1px solid $color-line;
+  border-radius: $radius;
+
+  &__item {
+    padding: 14px 16px;
+
+    & + & {
+      border-left: 1px solid $color-line;
+    }
+
+    &--done .task-stats__value {
+      color: $color-done;
+    }
+  }
+
+  &__label {
+    color: $color-muted;
+    font-size: 0.85rem;
+  }
+
+  &__value {
+    margin: 0;
+    font-size: 1.8rem;
+    font-weight: 700;
+  }
+}
