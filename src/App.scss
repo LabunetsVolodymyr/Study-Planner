@@ -1,0 +1,13 @@
+// Блок app (BEM): контейнер сторінки; елемент app__main розташовує секції в колонку.
+
+.app {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 32px 16px 64px;
+
+  &__main {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+}
