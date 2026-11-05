@@ -1,0 +1,48 @@
+// Блок task-filters. Модифікатор button--active позначає активний фільтр.
+
+@use '../styles/variables' as *;
+
+.task-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+
+  &__group {
+    display: flex;
+    gap: 4px;
+    padding: 4px;
+    background: $color-surface;
+    border: 1px solid $color-line;
+    border-radius: $radius;
+  }
+
+  &__button {
+    padding: 6px 14px;
+    border: 0;
+    border-radius: 6px;
+    background: transparent;
+    color: $color-ink;
+    cursor: pointer;
+
+    &:hover {
+      background: $color-accent-soft;
+    }
+
+    &--active,
+    &--active:hover {
+      background: $color-accent;
+      color: #fff;
+    }
+  }
+
+  &__clear {
+    padding: 6px 4px;
+    border: 0;
+    background: none;
+    color: $color-danger;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+}
