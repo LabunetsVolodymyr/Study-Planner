@@ -1,27 +1,14 @@
-// Блок task-form. Елементи: __field, __label, __input, __error, __submit. Модифікатори: --wide, --invalid.
-
-@use 'sass:color';
 @use '../styles/variables' as *;
 
 .task-form {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px 16px;
-  padding: 20px;
-  background: $color-surface;
-  border: 1px solid $color-line;
-  border-radius: $radius;
-
-  &__title {
-    grid-column: 1 / -1;
-    margin: 0;
-    font-size: 1.1rem;
-  }
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px $gap;
 
   &__field {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 6px;
 
     &--wide {
       grid-column: 1 / -1;
@@ -29,45 +16,63 @@
   }
 
   &__label {
-    font-size: 0.85rem;
+    font-size: 0.9rem;
     font-weight: 600;
   }
 
   &__input {
-    padding: 8px 10px;
-    border: 1px solid $color-line;
-    border-radius: 6px;
-    background: #fff;
-    color: $color-ink;
-    resize: vertical;
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--color-border);
+    border-radius: $radius-small;
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    font: inherit;
+    transition: border-color $transition;
+
+    &:focus {
+      border-color: var(--color-primary);
+      outline: none;
+    }
+
+    &--textarea {
+      resize: vertical;
+    }
 
     &--invalid {
-      border-color: $color-danger;
+      border-color: var(--color-danger);
     }
   }
 
   &__error {
-    color: $color-danger;
+    margin: 0;
+    color: var(--color-danger);
     font-size: 0.85rem;
   }
 
   &__submit {
     grid-column: 1 / -1;
-    justify-self: start;
-    padding: 9px 24px;
-    border: 0;
-    border-radius: 6px;
-    background: $color-accent;
-    color: #fff;
+    justify-self: end;
+    padding: 10px 28px;
+    border: none;
+    border-radius: $radius-small;
+    background-color: var(--color-primary);
+    color: var(--color-on-primary);
+    font: inherit;
     font-weight: 600;
     cursor: pointer;
+    transition: opacity $transition;
 
     &:hover {
-      background: color.adjust($color-accent, $lightness: -8%);
+      opacity: 0.9;
     }
   }
 
-  @media (max-width: 520px) {
+  @media (max-width: $breakpoint-mobile) {
     grid-template-columns: 1fr;
+
+    &__submit {
+      justify-self: stretch;
+    }
   }
 }
