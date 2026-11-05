@@ -1,0 +1,18 @@
+// Змінні дизайну: кольори, радіус та шрифт в одному місці (підключаються через @use).
+
+$color-bg: #eef1f7;
+$color-surface: #ffffff;
+$color-ink: #1a2238;
+$color-muted: #6b7490;
+$color-line: #d9deea;
+$color-accent: #2f4bd8;
+$color-accent-soft: #e4e9ff;
+$color-danger: #c53b3b;
+$color-done: #2f8f5b;
+
+$priority-high: #c53b3b;
+$priority-medium: #b87a0a;
+$priority-low: #2f8f5b;
+
+$radius: 10px;
+$font: 'Segoe UI', system-ui, -apple-system, Roboto, sans-serif;
