@@ -1,34 +1,35 @@
-import type { Task } from '../types/task';
-import './TaskStats.scss';
+import './TaskStats.scss'
 
-// Отримує весь масив завдань і сам рахує підсумки.
 interface TaskStatsProps {
-  tasks: Task[];
+    total: number
+    completed: number
+    active: number
+    onClearCompleted: () => void
 }
 
-function TaskStats({ tasks }: TaskStatsProps) {
-  // Звичайні операції над масивом, без окремого state для лічильників.
-  // Props змінюються, тож компонент перерендерюється й цифри оновлюються самі.
-  const total = tasks.length;
-  const completed = tasks.filter((task) => task.completed).length;
-  const active = total - completed;
+function TaskStats({ total, completed, active, onClearCompleted }: TaskStatsProps) {
+    return (
+        <section className="task-stats" aria-label="Статистика">
+            <div className="task-stats__item">
+                <span className="task-stats__value">{total}</span>
+                <span className="task-stats__label">Всього</span>
+            </div>
+            <div className="task-stats__item task-stats__item--completed">
+                <span className="task-stats__value">{completed}</span>
+                <span className="task-stats__label">Виконано</span>
+            </div>
+            <div className="task-stats__item task-stats__item--active">
+                <span className="task-stats__value">{active}</span>
+                <span className="task-stats__label">Не виконано</span>
+            </div>
 
-  return (
-    <dl className="task-stats">
-      <div className="task-stats__item">
-        <dt className="task-stats__label">Усього</dt>
-        <dd className="task-stats__value">{total}</dd>
-      </div>
-      <div className="task-stats__item task-stats__item--done">
-        <dt className="task-stats__label">Виконано</dt>
-        <dd className="task-stats__value">{completed}</dd>
-      </div>
-      <div className="task-stats__item">
-        <dt className="task-stats__label">Не виконано</dt>
-        <dd className="task-stats__value">{active}</dd>
-      </div>
-    </dl>
-  );
+            {completed > 0 && (
+                <button type="button" className="task-stats__clear" onClick={onClearCompleted}>
+                    Очистити виконані
+                </button>
+            )}
+        </section>
+    )
 }
 
-export default TaskStats;
+export default TaskStats

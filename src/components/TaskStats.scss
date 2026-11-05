@@ -1,35 +1,53 @@
-// Блок task-stats. Модифікатор item--done підсвічує лічильник виконаних зеленим.
-
 @use '../styles/variables' as *;
 
 .task-stats {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  margin: 0;
-  background: $color-surface;
-  border: 1px solid $color-line;
-  border-radius: $radius;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
 
   &__item {
-    padding: 14px 16px;
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-width: 120px;
+    padding: 12px $gap;
+    border: 1px solid var(--color-border);
+    border-radius: $radius;
+    background-color: var(--color-surface);
 
-    & + & {
-      border-left: 1px solid $color-line;
+    &--completed {
+      border-top: 3px solid var(--color-success);
     }
 
-    &--done .task-stats__value {
-      color: $color-done;
+    &--active {
+      border-top: 3px solid var(--color-warning);
     }
-  }
-
-  &__label {
-    color: $color-muted;
-    font-size: 0.85rem;
   }
 
   &__value {
-    margin: 0;
-    font-size: 1.8rem;
+    font-size: 1.6rem;
     font-weight: 700;
+    line-height: 1.2;
+  }
+
+  &__label {
+    color: var(--color-muted);
+    font-size: 0.85rem;
+  }
+
+  &__clear {
+    padding: 8px 14px;
+    border: 1px solid var(--color-danger);
+    border-radius: $radius-small;
+    background-color: transparent;
+    color: var(--color-danger);
+    font: inherit;
+    cursor: pointer;
+    transition: background-color $transition;
+
+    &:hover {
+      background-color: var(--color-danger-soft);
+    }
   }
 }
