@@ -1,48 +1,88 @@
-// Блок task-filters. Модифікатор button--active позначає активний фільтр.
-
 @use '../styles/variables' as *;
 
 .task-filters {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   gap: 12px;
-  align-items: center;
-  justify-content: space-between;
 
-  &__group {
+  &__buttons {
     display: flex;
-    gap: 4px;
-    padding: 4px;
-    background: $color-surface;
-    border: 1px solid $color-line;
-    border-radius: $radius;
+    flex-wrap: wrap;
+    gap: $gap-small;
   }
 
   &__button {
-    padding: 6px 14px;
-    border: 0;
-    border-radius: 6px;
-    background: transparent;
-    color: $color-ink;
+    display: inline-flex;
+    align-items: center;
+    gap: $gap-small;
+    padding: 8px 14px;
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    background-color: var(--color-surface);
+    color: var(--color-text);
+    font: inherit;
     cursor: pointer;
+    transition:
+            background-color $transition,
+            border-color $transition,
+            color $transition;
 
     &:hover {
-      background: $color-accent-soft;
+      border-color: var(--color-primary);
     }
 
-    &--active,
-    &--active:hover {
-      background: $color-accent;
-      color: #fff;
+    &--active {
+      border-color: var(--color-primary);
+      background-color: var(--color-primary);
+      color: var(--color-on-primary);
     }
   }
 
-  &__clear {
-    padding: 6px 4px;
-    border: 0;
-    background: none;
-    color: $color-danger;
-    text-decoration: underline;
+  &__count {
+    min-width: 22px;
+    padding: 0 6px;
+    border-radius: 999px;
+    background-color: var(--color-primary-soft);
+    color: var(--color-primary);
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-align: center;
+  }
+
+  &__button--active &__count {
+    background-color: var(--color-on-primary);
+    color: var(--color-primary);
+  }
+
+  &__tools {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px $gap;
+  }
+
+  &__search {
+    flex: 1;
+    min-width: 200px;
+    padding: 9px 12px;
+    border: 1px solid var(--color-border);
+    border-radius: $radius-small;
+    background-color: var(--color-surface);
+    color: var(--color-text);
+    font: inherit;
+
+    &:focus {
+      border-color: var(--color-primary);
+      outline: none;
+    }
+  }
+
+  &__sort {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--color-muted);
     cursor: pointer;
+    user-select: none;
   }
 }

@@ -1,48 +1,65 @@
-import type { TaskFilter } from '../types/task';
-import './TaskFilters.scss';
+import type { TaskFilter } from '../types/task'
+import { FILTER_LABELS } from '../utils/tasks'
+import './TaskFilters.scss'
 
 interface TaskFiltersProps {
-  current: TaskFilter; // який фільтр зараз активний (стан зберігається в App)
-  counts: Record<TaskFilter, number>; // кількість завдань для кожного фільтра
-  onChange: (filter: TaskFilter) => void; // callback зміни фільтра
-  onClearCompleted: () => void; // callback кнопки "Очистити виконані"
+    filter: TaskFilter
+    counts: Record<TaskFilter, number>
+    search: string
+    sortByPriority: boolean
+    onFilterChange: (filter: TaskFilter) => void
+    onSearchChange: (value: string) => void
+    onSortChange: (value: boolean) => void
 }
 
-// Опції описані масивом, щоб не дублювати три майже однакові кнопки
-const options: { value: TaskFilter; label: string }[] = [
-  { value: 'all', label: 'Всі' },
-  { value: 'completed', label: 'Виконані' },
-  { value: 'active', label: 'Не виконані' },
-];
+const FILTERS: TaskFilter[] = ['all', 'completed', 'active']
 
-function TaskFilters({ current, counts, onChange, onClearCompleted }: TaskFiltersProps) {
-  return (
-    <div className="task-filters">
-      <div className="task-filters__group" role="group" aria-label="Фільтр завдань">
-        {options.map(({ value, label }) => (
-          <button
-            key={value} // стабільний key: унікальне значення фільтра
-            type="button"
-            // Активний фільтр позначаємо BEM-модифікатором
-            className={`task-filters__button${
-              current === value ? ' task-filters__button--active' : ''
-            }`}
-            aria-pressed={current === value}
-            onClick={() => onChange(value)}
-          >
-            {label} ({counts[value]})
-          </button>
-        ))}
-      </div>
+function TaskFilters({
+                         filter,
+                         counts,
+                         search,
+                         sortByPriority,
+                         onFilterChange,
+                         onSearchChange,
+                         onSortChange,
+                     }: TaskFiltersProps) {
+    return (
+        <div className="task-filters">
+            <div className="task-filters__buttons" role="group" aria-label="Фільтр завдань">
+                {FILTERS.map((value) => (
+                    <button
+                        key={value}
+                        type="button"
+                        className={`task-filters__button ${filter === value ? 'task-filters__button--active' : ''}`}
+                        aria-pressed={filter === value}
+                        onClick={() => onFilterChange(value)}
+                    >
+                        {FILTER_LABELS[value]}
+                        <span className="task-filters__count">{counts[value]}</span>
+                    </button>
+                ))}
+            </div>
 
-      {/* Умовний рендеринг: кнопка має сенс лише якщо є виконані завдання */}
-      {counts.completed > 0 && (
-        <button type="button" className="task-filters__clear" onClick={onClearCompleted}>
-          Очистити виконані
-        </button>
-      )}
-    </div>
-  );
+            <div className="task-filters__tools">
+                <input
+                    type="search"
+                    className="task-filters__search"
+                    value={search}
+                    onChange={(event) => onSearchChange(event.target.value)}
+                    placeholder="Пошук за назвою..."
+                    aria-label="Пошук за назвою"
+                />
+                <label className="task-filters__sort">
+                    <input
+                        type="checkbox"
+                        checked={sortByPriority}
+                        onChange={(event) => onSortChange(event.target.checked)}
+                    />
+                    Спочатку важливі
+                </label>
+            </div>
+        </div>
+    )
 }
 
-export default TaskFilters;
+export default TaskFilters
