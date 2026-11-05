@@ -1,0 +1,24 @@
+// Блок task-list. Елемент __empty використовується для порожніх станів.
+
+@use '../styles/variables' as *;
+
+.task-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  &__empty {
+    padding: 32px 16px;
+    border: 2px dashed $color-line;
+    border-radius: $radius;
+    color: $color-muted;
+    text-align: center;
+
+    p {
+      margin: 2px 0;
+    }
+  }
+}

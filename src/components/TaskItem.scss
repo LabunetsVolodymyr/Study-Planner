@@ -1,0 +1,127 @@
+// Блок task-item. Модифікатори: --high/--medium/--low (пріоритет) та --completed (виконане завдання).
+
+@use 'sass:color';
+@use '../styles/variables' as *;
+
+.task-item {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 14px 16px;
+  background: $color-surface;
+  border: 1px solid $color-line;
+  border-left: 5px solid $color-line;
+  border-radius: $radius;
+
+  &--high {
+    border-left-color: $priority-high;
+  }
+
+  &--medium {
+    border-left-color: $priority-medium;
+  }
+
+  &--low {
+    border-left-color: $priority-low;
+  }
+
+  &__body {
+    min-width: 0;
+  }
+
+  &__title {
+    margin: 0;
+    font-size: 1.05rem;
+  }
+
+  &__description {
+    margin: 4px 0 0;
+    color: $color-muted;
+  }
+
+  &__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+    font-size: 0.8rem;
+  }
+
+  &__category,
+  &__priority,
+  &__status {
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: $color-accent-soft;
+  }
+
+  &__priority {
+    &--high {
+      background: color.adjust($priority-high, $lightness: 40%);
+      color: $priority-high;
+    }
+
+    &--medium {
+      background: color.adjust($priority-medium, $lightness: 50%);
+      color: $priority-medium;
+    }
+
+    &--low {
+      background: color.adjust($priority-low, $lightness: 50%);
+      color: $priority-low;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  &__button {
+    padding: 5px 12px;
+    border: 1px solid $color-line;
+    border-radius: 6px;
+    background: #fff;
+    color: $color-ink;
+    cursor: pointer;
+    white-space: nowrap;
+
+    &:hover {
+      border-color: $color-accent;
+    }
+
+    &--danger {
+      color: $color-danger;
+
+      &:hover {
+        border-color: $color-danger;
+      }
+    }
+  }
+
+  // Виконане завдання: приглушене, закреслений заголовок
+  &--completed {
+    background: #f6f8f7;
+    border-left-color: $color-done;
+
+    .task-item__title {
+      color: $color-muted;
+      text-decoration: line-through;
+    }
+
+    .task-item__status {
+      background: color.adjust($color-done, $lightness: 55%);
+      color: $color-done;
+    }
+  }
+
+  @media (max-width: 520px) {
+    flex-direction: column;
+
+    &__actions {
+      flex-direction: row;
+    }
+  }
+}
