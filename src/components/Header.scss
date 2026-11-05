@@ -1,0 +1,20 @@
+// Блок header: елементи header__title та header__subtitle.
+
+@use '../styles/variables' as *;
+
+.header {
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid $color-ink;
+
+  &__title {
+    margin: 0;
+    font-size: 2rem;
+    letter-spacing: -0.02em;
+  }
+
+  &__subtitle {
+    margin: 4px 0 0;
+    color: $color-muted;
+  }
+}
