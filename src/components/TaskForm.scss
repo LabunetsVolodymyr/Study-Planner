@@ -1,7 +1,9 @@
 @use '../styles/variables' as *;
 
+// Блок task-form: сітка з двох колонок; на мобільних перетворюється на одну
 .task-form {
   display: grid;
+  // minmax(0, 1fr) не дає довгому вмісту розтягнути колонку
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 14px $gap;
 
@@ -10,6 +12,7 @@
     flex-direction: column;
     gap: 6px;
 
+    // Поле на всю ширину сітки (назва й опис)
     &--wide {
       grid-column: 1 / -1;
     }
@@ -39,6 +42,7 @@
       resize: vertical;
     }
 
+    // Модифікатор помилки валідації
     &--invalid {
       border-color: var(--color-danger);
     }

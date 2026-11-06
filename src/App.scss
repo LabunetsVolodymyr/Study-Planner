@@ -1,6 +1,9 @@
 @use './styles/variables' as *;
 
+// Блок app (BEM). Тема реалізована через CSS-змінні (custom properties):
+// усі компоненти беруть кольори з var(--color-*), а значення задає цей блок.
 .app {
+  // Світла тема (за замовчуванням)
   --color-bg: #f3f5fa;
   --color-surface: #ffffff;
   --color-border: #e1e5ee;
@@ -22,6 +25,7 @@
   color: var(--color-text);
   transition: background-color $transition;
 
+  // Модифікатор app--dark перевизначає ті самі змінні: тема змінюється без правок у компонентах
   &--dark {
     --color-bg: #12151c;
     --color-surface: #1c212b;
@@ -39,6 +43,7 @@
     --color-warning-soft: #3a3020;
   }
 
+  // Контейнер розташовує секції в колонку з однаковим відступом
   &__container {
     display: flex;
     flex-direction: column;
@@ -47,6 +52,7 @@
     margin: 0 auto;
   }
 
+  // Картка-панель (використовується для форми)
   &__panel {
     padding: 20px;
     border: 1px solid var(--color-border);

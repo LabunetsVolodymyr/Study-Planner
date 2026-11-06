@@ -1,5 +1,6 @@
 @use '../styles/variables' as *;
 
+// Блок task-item: картка одного завдання
 .task-item {
   display: flex;
   align-items: flex-start;
@@ -7,6 +8,7 @@
   gap: $gap;
   padding: $gap;
   border: 1px solid var(--color-border);
+  // Кольорова смужка зліва; для виконаного змінюється на зелену
   border-left: 4px solid var(--color-primary);
   border-radius: $radius;
   background-color: var(--color-surface);
@@ -14,6 +16,7 @@
           opacity $transition,
           border-color $transition;
 
+  // Модифікатор: виконане завдання приглушене
   &--completed {
     border-left-color: var(--color-success);
     opacity: 0.7;
@@ -21,6 +24,7 @@
 
   &__content {
     flex: 1;
+    // min-width: 0 дозволяє довгому тексту переноситись, а не розпирати картку
     min-width: 0;
   }
 
@@ -30,6 +34,7 @@
     word-break: break-word;
   }
 
+  // Закреслена назва лише у виконаного завдання
   &--completed &__title {
     text-decoration: line-through;
   }
@@ -59,6 +64,7 @@
       color: var(--color-primary);
     }
 
+    // Три модифікатори пріоритету: зелений / жовтий / червоний
     &--low {
       background-color: var(--color-success-soft);
       color: var(--color-success);
@@ -122,6 +128,7 @@
     }
   }
 
+  // На мобільних картка стає вертикальною, кнопки в ряд
   @media (max-width: $breakpoint-mobile) {
     flex-direction: column;
 

@@ -2,9 +2,11 @@ import type { TaskFilter } from '../types/task'
 import { FILTER_LABELS } from '../utils/tasks'
 import './TaskFilters.scss'
 
+// Усі значення (filter, search, sortByPriority) зберігає App.
+// Компонент лише показує їх і повідомляє про зміни через callback-и.
 interface TaskFiltersProps {
-    filter: TaskFilter
-    counts: Record<TaskFilter, number>
+    filter: TaskFilter // активний фільтр
+    counts: Record<TaskFilter, number> // кількість завдань для кожного фільтра
     search: string
     sortByPriority: boolean
     onFilterChange: (filter: TaskFilter) => void
@@ -12,6 +14,7 @@ interface TaskFiltersProps {
     onSortChange: (value: boolean) => void
 }
 
+// Порядок кнопок описаний масивом, щоб не дублювати три однакові кнопки
 const FILTERS: TaskFilter[] = ['all', 'completed', 'active']
 
 function TaskFilters({
@@ -28,8 +31,9 @@ function TaskFilters({
             <div className="task-filters__buttons" role="group" aria-label="Фільтр завдань">
                 {FILTERS.map((value) => (
                     <button
-                        key={value}
+                        key={value} // стабільний ключ: унікальне значення фільтра
                         type="button"
+                        // Активний фільтр позначаємо BEM-модифікатором
                         className={`task-filters__button ${filter === value ? 'task-filters__button--active' : ''}`}
                         aria-pressed={filter === value}
                         onClick={() => onFilterChange(value)}
@@ -41,6 +45,8 @@ function TaskFilters({
             </div>
 
             <div className="task-filters__tools">
+                {/* Контрольований input: значення береться зі state в App,
+                    а кожна зміна одразу йде в setSearch через callback */}
                 <input
                     type="search"
                     className="task-filters__search"

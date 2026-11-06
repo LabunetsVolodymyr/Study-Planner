@@ -1,5 +1,6 @@
 import './TaskStats.scss'
 
+// Компонент лише відображає готові цифри з props (обчислює їх App)
 interface TaskStatsProps {
     total: number
     completed: number
@@ -23,6 +24,7 @@ function TaskStats({ total, completed, active, onClearCompleted }: TaskStatsProp
                 <span className="task-stats__label">Не виконано</span>
             </div>
 
+            {/* Умовний рендеринг: кнопка має сенс лише якщо є виконані завдання */}
             {completed > 0 && (
                 <button type="button" className="task-stats__clear" onClick={onClearCompleted}>
                     Очистити виконані

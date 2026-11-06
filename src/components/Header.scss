@@ -1,5 +1,6 @@
 @use '../styles/variables' as *;
 
+// Блок header: заголовок зліва, кнопка теми справа
 .header {
   display: flex;
   align-items: center;
@@ -18,12 +19,14 @@
   }
 
   &__theme-button {
+    // Кнопка не стискається, коли місця мало
     flex-shrink: 0;
     padding: 8px 14px;
     border: 1px solid var(--color-border);
     border-radius: 999px;
     background-color: var(--color-surface);
     color: var(--color-text);
+    // Кнопка успадковує шрифт сторінки (за замовчуванням браузер ставить свій)
     font: inherit;
     cursor: pointer;
     transition: border-color $transition;

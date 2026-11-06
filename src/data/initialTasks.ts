@@ -1,5 +1,6 @@
 import type { Task } from '../types/task'
 
+// Початкові дані. Живуть лише в пам'яті React: після перезавантаження скидаються.
 export const initialTasks: Task[] = [
     {
         id: 1,

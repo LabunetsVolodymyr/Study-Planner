@@ -1,13 +1,16 @@
 @use '../styles/variables' as *;
 
+// Блок task-list: вертикальний список завдань
 .task-list {
   display: flex;
   flex-direction: column;
   gap: 12px;
+  // Прибираємо стандартні маркери та відступи <ul>
   margin: 0;
   padding: 0;
   list-style: none;
 
+  // Елемент для порожніх станів (пунктирна рамка)
   &__empty {
     padding: 32px $gap;
     border: 1px dashed var(--color-border);
