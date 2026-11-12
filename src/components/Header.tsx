@@ -1,13 +1,10 @@
+import { useTheme } from '../hooks/useTheme'
 import './Header.scss'
 
-// Props: поточна тема та callback перемикання.
-// Стан теми живе в App, а Header лише відображає його й повідомляє про клік.
-interface HeaderProps {
-    isDark: boolean
-    onToggleTheme: () => void
-}
+function Header() {
+    const { theme, toggleTheme } = useTheme()
+    const isDark = theme === 'dark'
 
-function Header({ isDark, onToggleTheme }: HeaderProps) {
     return (
         <header className="header">
             <div>
@@ -18,11 +15,9 @@ function Header({ isDark, onToggleTheme }: HeaderProps) {
             <button
                 type="button"
                 className="header__theme-button"
-                onClick={onToggleTheme}
-                // aria-label для скрінрідерів: що станеться після натискання
+                onClick={toggleTheme}
                 aria-label={isDark ? 'Увімкнути світлу тему' : 'Увімкнути темну тему'}
             >
-                {/* Умовний рендеринг через тернарний оператор */}
                 {isDark ? '☀️ Світла' : '🌙 Темна'}
             </button>
         </header>

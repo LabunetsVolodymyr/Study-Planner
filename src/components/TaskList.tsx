@@ -1,18 +1,12 @@
-import type { Task } from '../types/task'
+import { useTaskContext } from '../hooks/useTaskContext'
+import { getVisibleTasks } from '../utils/tasks'
 import TaskItem from './TaskItem'
 import './TaskList.scss'
 
-interface TaskListProps {
-    tasks: Task[] // уже відфільтровані, знайдені й відсортовані завдання
-    hasTasks: boolean // чи є завдання взагалі (щоб відрізнити два порожні стани)
-    onToggle: (id: number) => void
-    onDelete: (id: number) => void
-}
+function TaskList() {
+    const { tasks, filter, search, isSortedByPriority, pendingDeletion } = useTaskContext()
 
-function TaskList({ tasks, hasTasks, onToggle, onDelete }: TaskListProps) {
-    // Умовний рендеринг через ранній return. Два різні порожні стани:
-    // 1) завдань немає взагалі
-    if (!hasTasks) {
+    if (tasks.length === 0) {
         return (
             <div className="task-list__empty">
                 <p className="task-list__empty-title">Завдань поки немає.</p>
@@ -21,8 +15,9 @@ function TaskList({ tasks, hasTasks, onToggle, onDelete }: TaskListProps) {
         )
     }
 
-    // 2) завдання є, але під фільтр/пошук нічого не підходить
-    if (tasks.length === 0) {
+    const visibleTasks = getVisibleTasks(tasks, filter, search, isSortedByPriority)
+
+    if (visibleTasks.length === 0) {
         return (
             <div className="task-list__empty">
                 <p className="task-list__empty-title">За цим фільтром завдань немає.</p>
@@ -30,13 +25,14 @@ function TaskList({ tasks, hasTasks, onToggle, onDelete }: TaskListProps) {
         )
     }
 
-    // Рендер списку через map. key має бути стабільним та унікальним (id),
-    // а не індексом: інакше після видалення чи зміни порядку
-    // React може переплутати елементи.
     return (
         <ul className="task-list">
-            {tasks.map((task) => (
-                <TaskItem key={task.id} task={task} onToggle={onToggle} onDelete={onDelete} />
+            {visibleTasks.map((task) => (
+                <TaskItem
+                    key={task.id}
+                    task={task}
+                    isPending={pendingDeletion?.ids.includes(task.id) ?? false}
+                />
             ))}
         </ul>
     )

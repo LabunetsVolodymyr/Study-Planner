@@ -1,6 +1,5 @@
 @use '../styles/variables' as *;
 
-// Блок task-stats: три лічильники та кнопка очищення в одному ряду
 .task-stats {
   display: flex;
   flex-wrap: wrap;
@@ -9,7 +8,6 @@
 
   &__item {
     display: flex;
-    // flex: 1 розтягує картки рівномірно, min-width не дає їм стати надто вузькими
     flex: 1;
     flex-direction: column;
     min-width: 120px;
@@ -18,7 +16,6 @@
     border-radius: $radius;
     background-color: var(--color-surface);
 
-    // Кольорова верхня смужка для виконаних і невиконаних
     &--completed {
       border-top: 3px solid var(--color-success);
     }
@@ -39,18 +36,46 @@
     font-size: 0.85rem;
   }
 
-  &__clear {
+  &__actions {
+    display: flex;
+    flex-direction: column;
+    gap: $gap-small;
+  }
+
+  &__button {
     padding: 8px 14px;
-    border: 1px solid var(--color-danger);
+    border: 1px solid var(--color-border);
     border-radius: $radius-small;
     background-color: transparent;
-    color: var(--color-danger);
+    color: var(--color-text);
     font: inherit;
+    white-space: nowrap;
     cursor: pointer;
     transition: background-color $transition;
 
     &:hover {
-      background-color: var(--color-danger-soft);
+      background-color: var(--color-primary-soft);
+    }
+
+    &--danger {
+      border-color: var(--color-danger);
+      color: var(--color-danger);
+
+      &:hover {
+        background-color: var(--color-danger-soft);
+      }
+    }
+  }
+
+  @media (max-width: $breakpoint-mobile) {
+    &__actions {
+      flex-direction: row;
+      flex-wrap: wrap;
+      width: 100%;
+    }
+
+    &__button {
+      flex: 1;
     }
   }
 }

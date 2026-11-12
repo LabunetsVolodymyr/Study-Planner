@@ -1,51 +1,53 @@
 import { useId, useState } from 'react'
 import type { FormEvent } from 'react'
-import type { NewTask, TaskPriority } from '../types/task'
+import { useTaskContext } from '../hooks/useTaskContext'
+import type { Task, TaskPriority } from '../types/task'
 import { PRIORITY_LABELS } from '../utils/tasks'
 import './TaskForm.scss'
 
-// Форма не змінює список сама: вона передає готове завдання вгору через onAdd
 interface TaskFormProps {
-    onAdd: (task: NewTask) => void
+    task?: Task
+    onDone?: () => void
 }
 
 const DEFAULT_CATEGORY = 'Загальне'
 const PRIORITIES: TaskPriority[] = ['low', 'medium', 'high']
 
-function TaskForm({ onAdd }: TaskFormProps) {
-    // Локальний стан полів (контрольовані поля): значення живуть у React, а не в DOM.
-    // Він потрібен лише формі, тому не піднімається в App.
-    const [title, setTitle] = useState('')
-    const [description, setDescription] = useState('')
-    const [category, setCategory] = useState('')
-    const [priority, setPriority] = useState<TaskPriority>('medium')
-    // Текст помилки валідації (порожній рядок = помилки немає)
+function TaskForm({ task, onDone }: TaskFormProps) {
+    const { addTask, updateTask } = useTaskContext()
+    const isEditing = task !== undefined
+
+    const [title, setTitle] = useState(task?.title ?? '')
+    const [description, setDescription] = useState(task?.description ?? '')
+    const [category, setCategory] = useState(task?.category ?? '')
+    const [priority, setPriority] = useState<TaskPriority>(task?.priority ?? 'medium')
     const [error, setError] = useState('')
 
-    // useId генерує унікальний id, щоб зв'язати <label htmlFor> з відповідним полем
     const id = useId()
 
     function handleSubmit(event: FormEvent<HTMLFormElement>) {
-        // Скасовуємо стандартну відправку форми (перезавантаження сторінки)
         event.preventDefault()
 
-        // Проста валідація без бібліотек: назва обов'язкова.
-        // trim() прибирає пробіли, щоб "   " не вважалося назвою.
         const trimmedTitle = title.trim()
         if (!trimmedTitle) {
             setError('Введіть назву завдання')
             return
         }
 
-        // Передаємо дані вгору через callback з props
-        onAdd({
+        const values = {
             title: trimmedTitle,
             description: description.trim(),
             category: category.trim() || DEFAULT_CATEGORY,
             priority,
-        })
+        }
 
-        // Після успішного додавання очищуємо форму
+        if (isEditing) {
+            updateTask(task.id, values)
+            onDone?.()
+            return
+        }
+
+        addTask(values)
         setTitle('')
         setDescription('')
         setCategory('')
@@ -54,25 +56,25 @@ function TaskForm({ onAdd }: TaskFormProps) {
     }
 
     return (
-        <form className="task-form" onSubmit={handleSubmit} noValidate>
+        <form
+            className={`task-form ${isEditing ? 'task-form--editing' : ''}`}
+            onSubmit={handleSubmit}
+            noValidate
+        >
             <div className="task-form__field task-form__field--wide">
                 <label className="task-form__label" htmlFor={`${id}-title`}>
                     Назва *
                 </label>
                 <input
                     id={`${id}-title`}
-                    // BEM-модифікатор додається, коли є помилка
                     className={`task-form__input ${error ? 'task-form__input--invalid' : ''}`}
                     value={title}
                     onChange={(event) => {
                         setTitle(event.target.value)
-                        // Як тільки користувач редагує поле, прибираємо помилку
                         if (error) setError('')
                     }}
                     placeholder="Наприклад: Вивчити useState"
                 />
-                {/* Умовний рендеринг через &&: помилку показуємо лише коли вона є.
-                    Замість alert, як вимагає завдання. */}
                 {error && <p className="task-form__error">{error}</p>}
             </div>
 
@@ -111,11 +113,8 @@ function TaskForm({ onAdd }: TaskFormProps) {
                     id={`${id}-priority`}
                     className="task-form__input"
                     value={priority}
-                    // as TaskPriority: значення з select приходить як string,
-                    // а ми знаємо, що це один з трьох допустимих варіантів
                     onChange={(event) => setPriority(event.target.value as TaskPriority)}
                 >
-                    {/* Варіанти будуємо через map; key = унікальне значення */}
                     {PRIORITIES.map((value) => (
                         <option key={value} value={value}>
                             {PRIORITY_LABELS[value]}
@@ -124,9 +123,16 @@ function TaskForm({ onAdd }: TaskFormProps) {
                 </select>
             </div>
 
-            <button type="submit" className="task-form__submit">
-                Додати
-            </button>
+            <div className="task-form__actions">
+                {isEditing && (
+                    <button type="button" className="task-form__cancel" onClick={onDone}>
+                        Скасувати
+                    </button>
+                )}
+                <button type="submit" className="task-form__submit">
+                    {isEditing ? 'Зберегти' : 'Додати'}
+                </button>
+            </div>
         </form>
     )
 }

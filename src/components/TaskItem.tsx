@@ -1,50 +1,71 @@
+import { useState } from 'react'
+import { useTaskContext } from '../hooks/useTaskContext'
 import type { Task } from '../types/task'
 import { PRIORITY_LABELS } from '../utils/tasks'
+import TaskForm from './TaskForm'
 import './TaskItem.scss'
 
-// Props лише для читання: компонент не змінює task напряму,
-// а викликає callback-и, а дані змінює вже App.
 interface TaskItemProps {
     task: Task
-    onToggle: (id: number) => void
-    onDelete: (id: number) => void
+    isPending: boolean
 }
 
-function TaskItem({ task, onToggle, onDelete }: TaskItemProps) {
+function TaskItem({ task, isPending }: TaskItemProps) {
+    const { toggleTask, requestDelete } = useTaskContext()
+    const [isEditing, setIsEditing] = useState(false)
+
+    if (isEditing && !isPending) {
+        return (
+            <li className="task-item task-item--editing">
+                <TaskForm task={task} onDone={() => setIsEditing(false)} />
+            </li>
+        )
+    }
+
+    const modifiers = [
+        task.completed ? 'task-item--completed' : '',
+        isPending ? 'task-item--pending' : '',
+    ].join(' ')
+
     return (
-        // BEM-модифікатор task-item--completed дає виконаному завданню інший вигляд
-        <li className={`task-item ${task.completed ? 'task-item--completed' : ''}`}>
+        <li className={`task-item ${modifiers}`}>
             <div className="task-item__content">
                 <h3 className="task-item__title">{task.title}</h3>
-                {/* Опис показуємо, лише якщо він не порожній */}
                 {task.description && <p className="task-item__description">{task.description}</p>}
 
                 <div className="task-item__meta">
                     <span className="task-item__badge task-item__badge--category">{task.category}</span>
-                    {/* Колір бейджа залежить від пріоритету: --low / --medium / --high */}
                     <span className={`task-item__badge task-item__badge--${task.priority}`}>
-                        {PRIORITY_LABELS[task.priority]}
-                    </span>
+            {PRIORITY_LABELS[task.priority]}
+          </span>
                     <span className="task-item__status">
-                        {task.completed ? '✓ Виконано' : 'Не виконано'}
-                    </span>
+            {isPending ? 'Буде видалено' : task.completed ? '✓ Виконано' : 'Не виконано'}
+          </span>
                 </div>
             </div>
 
             <div className="task-item__actions">
-                {/* Стрілкова функція потрібна, щоб передати id у callback.
-                    Запис onClick={onToggle(task.id)} викликав би функцію під час рендеру. */}
                 <button
                     type="button"
                     className="task-item__button task-item__button--toggle"
-                    onClick={() => onToggle(task.id)}
+                    onClick={() => toggleTask(task.id)}
+                    disabled={isPending}
                 >
                     {task.completed ? 'Повернути' : 'Виконати'}
                 </button>
                 <button
                     type="button"
+                    className="task-item__button task-item__button--edit"
+                    onClick={() => setIsEditing(true)}
+                    disabled={isPending}
+                >
+                    Редагувати
+                </button>
+                <button
+                    type="button"
                     className="task-item__button task-item__button--delete"
-                    onClick={() => onDelete(task.id)}
+                    onClick={() => requestDelete(task.id)}
+                    disabled={isPending}
                 >
                     Видалити
                 </button>

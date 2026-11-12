@@ -1,6 +1,5 @@
 @use '../styles/variables' as *;
 
-// Блок task-item: картка одного завдання
 .task-item {
   display: flex;
   align-items: flex-start;
@@ -8,7 +7,6 @@
   gap: $gap;
   padding: $gap;
   border: 1px solid var(--color-border);
-  // Кольорова смужка зліва; для виконаного змінюється на зелену
   border-left: 4px solid var(--color-primary);
   border-radius: $radius;
   background-color: var(--color-surface);
@@ -16,15 +14,25 @@
           opacity $transition,
           border-color $transition;
 
-  // Модифікатор: виконане завдання приглушене
   &--completed {
     border-left-color: var(--color-success);
     opacity: 0.7;
   }
 
+  &--pending {
+    border-style: dashed;
+    border-left-style: solid;
+    border-left-color: var(--color-danger);
+    opacity: 0.5;
+  }
+
+  &--editing {
+    display: block;
+    border-left-color: var(--color-warning);
+  }
+
   &__content {
     flex: 1;
-    // min-width: 0 дозволяє довгому тексту переноситись, а не розпирати картку
     min-width: 0;
   }
 
@@ -34,7 +42,6 @@
     word-break: break-word;
   }
 
-  // Закреслена назва лише у виконаного завдання
   &--completed &__title {
     text-decoration: line-through;
   }
@@ -64,7 +71,6 @@
       color: var(--color-primary);
     }
 
-    // Три модифікатори пріоритету: зелений / жовтий / червоний
     &--low {
       background-color: var(--color-success-soft);
       color: var(--color-success);
@@ -91,6 +97,11 @@
     font-weight: 600;
   }
 
+  &--pending &__status {
+    color: var(--color-danger);
+    font-weight: 600;
+  }
+
   &__actions {
     display: flex;
     flex-direction: column;
@@ -112,23 +123,33 @@
             border-color $transition,
             color $transition;
 
-    &--toggle:hover {
+    &:disabled {
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+
+    &--toggle:hover:not(:disabled) {
       border-color: var(--color-success);
       background-color: var(--color-success-soft);
       color: var(--color-success);
     }
 
+    &--edit:hover:not(:disabled) {
+      border-color: var(--color-primary);
+      background-color: var(--color-primary-soft);
+      color: var(--color-primary);
+    }
+
     &--delete {
       color: var(--color-danger);
 
-      &:hover {
+      &:hover:not(:disabled) {
         border-color: var(--color-danger);
         background-color: var(--color-danger-soft);
       }
     }
   }
 
-  // На мобільних картка стає вертикальною, кнопки в ряд
   @media (max-width: $breakpoint-mobile) {
     flex-direction: column;
 
